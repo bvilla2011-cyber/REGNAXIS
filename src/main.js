@@ -81,9 +81,9 @@ function selectCountry(){chrome(tr('country'));addText(scene,'DOS NACIONES FICTI
 async function start(player){state.busy=true;state.player=player;state.news='';
   const data={countries:{A:{name:'Aurel',treasury:1000,budget:{tax:.25,research:.02,military:.05,social:.08}},
     B:{name:'Bruma',treasury:800,budget:{tax:.25,research:.02,military:.05,social:.08}}},
-    cells:{west:{owner:'A',controller:'A',neighbors:['middle'],area:1},
+    cells:{west:{owner:'A',controller:'A',neighbors:['middle','sea'],area:1,coastal:true},
       middle:{owner:'B',controller:'B',neighbors:['west','east'],area:1,resistance:.2},
-      east:{owner:'B',controller:'B',neighbors:['middle'],area:1}},
+      east:{owner:'B',controller:'B',neighbors:['middle'],area:1},sea:{owner:'A',controller:'A',neighbors:['west'],area:0,sea:true}},
     points:[{id:'p1',cell:'west',gdp:400,population:4e6},{id:'p2',cell:'middle',gdp:200,population:2e6},
       {id:'p3',cell:'east',gdp:400,population:4e6}],
     armies:[{id:'a1',country:'A',cell:'west',type:'infantry',strength:100,equipment:1,morale:80,supply:1}],player};
@@ -95,22 +95,27 @@ async function loadGame(){const raw=localStorage.getItem('regnaxis-save-v1');if(
   const save=JSON.parse(raw);if(save.version!==1)throw Error('Versión de guardado no compatible');
   const result=await sim.send('load',save.world);state.world=result.world;state.player=save.player;state.mode=save.mode??'casual';state.timeline=save.timeline??[result.world];state.scene='game';state.panel=null;state.paused=true;draw();}
 
-const cellGeometry={west:{x:170,y:320,w:250,h:220},middle:{x:425,y:260,w:260,h:280},east:{x:690,y:295,w:320,h:250}};
+const cellGeometry={west:{x:170,y:320,w:250,h:220},middle:{x:425,y:260,w:260,h:280},east:{x:690,y:295,w:320,h:250},sea:{x:185,y:535,w:240,h:62}};
 function mapView(){
   const map=new Container();map.position.set(state.camera.x,state.camera.y);map.scale.set(state.camera.scale);
   for(const [id,box] of Object.entries(cellGeometry)){
     const own=state.world.cells[id].controller;
-    const color=own==='A'?C.accent:C.red;
+    const color=state.world.cells[id].sea?C.blue:own==='A'?C.accent:C.red;
     const shape=new Graphics();shape.roundRect(box.x,box.y,box.w,box.h,24).fill({color,alpha:id===state.selected?.38:.21});
     shape.roundRect(box.x,box.y,box.w,box.h,24).stroke({color: id===state.selected?C.gold:color,width:id===state.selected?4:2,alpha:.9});
     shape.eventMode='static';shape.cursor='pointer';shape.on('pointertap',e=>{e.stopPropagation();state.selected=id;beep();draw();});
     map.addChild(shape);
     addText(map,id.toUpperCase(),box.x+18,box.y+22,18,C.text,'800');
     const points=state.world.points.filter(p=>p.cell===id);addText(map,`◆ ${fmt(points.reduce((s,p)=>s+p.gdp,0))} PIB`,box.x+18,box.y+57,14,C.gold);
+    if(state.world.cells[id].sea)addText(map,'≈  ZONA MARÍTIMA',box.x+18,box.y+22,13,C.text,'700');
   }
   for(const army of state.world.armies){const box=cellGeometry[army.cell];if(!box)continue;
     const g=new Graphics();g.circle(box.x+box.w/2,box.y+box.h/2,23).fill({color:C.bg});g.circle(box.x+box.w/2,box.y+box.h/2,23).stroke({color:C.gold,width:2});map.addChild(g);
     addText(map,'⚔',box.x+box.w/2-10,box.y+box.h/2-13,20,C.gold);
+  }
+  for(const fleet of state.world.fleets??[]){const box=cellGeometry[fleet.cell];if(!box)continue;
+    const g=new Graphics();g.star(box.x+box.w/2,box.y+box.h/2,5,14,7).fill({color:C.gold});map.addChild(g);
+    addText(map,'⚓',box.x+box.w/2-10,box.y+box.h/2-12,19,C.text);
   }
   scene.addChild(map);
   let down=null;
@@ -180,6 +185,10 @@ function drawPanel(){const key=state.panel,w=state.world,c=state.player?w.countr
     at(overlay,button(tr('attack'),145,49,action(async()=>{const army=w.armies.find(a=>a.country===state.player);
       if(!army)throw Error('Sin ejército disponible');
       const r=await sim.send('order',{army:army.id,kind:'attack',target:state.selected});state.world=r.world;draw();},'danger')),551,500);
+    at(overlay,button('CONSTRUIR DESTRUCTOR · 180',235,46,action(async()=>{
+      const sea=Object.keys(w.cells).find(id=>w.cells[id].sea);if(!sea)throw Error('Este escenario no tiene mar');
+      const r=await sim.send('buildShip',{country:state.player,type:'destroyer',sea});state.world=r.world;draw();
+    })),391,553);
   }
   if(key==='research'&&state.player)at(overlay,button('INDUSTRIA  20 RP',200,49,action(async()=>{
     const r=await sim.send('research',{country:state.player,project:'industry'});state.world=r.world;draw();})),393,500);
