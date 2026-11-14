@@ -60,6 +60,9 @@ function menu(){chrome('EL MUNDO NO ESPERA');
   at(scene,button(tr('start'),315,64,action(()=>{state.scene='select';draw();})),72,331);
   at(scene,button(tr('observe'),315,54,action(()=>start(null)),{accent:C.gold}),72,407);
   at(scene,button(tr('settings'),315,54,action(()=>{state.scene='settings';draw();}),{accent:C.blue}),72,475);
+  addText(scene,'DIFICULTAD',72,562,12,C.muted,'700');
+  at(scene,button(state.mode==='casual'?'CASUAL ✓':'CASUAL',138,40,action(()=>{state.mode='casual';draw();}),{small:true}),72,581);
+  at(scene,button(state.mode==='hardcore'?'HARDCORE ✓':'HARDCORE',158,40,action(()=>{state.mode='hardcore';draw();}),{accent:C.red,small:true}),220,581);
   addText(scene,'ALFA 0.1   ·   SIMULACIÓN LOCAL',70,636,13,C.muted);
 }
 
@@ -180,6 +183,19 @@ function drawPanel(){const key=state.panel,w=state.world,c=state.player?w.countr
   }
   if(key==='research'&&state.player)at(overlay,button('INDUSTRIA  20 RP',200,49,action(async()=>{
     const r=await sim.send('research',{country:state.player,project:'industry'});state.world=r.world;draw();})),393,500);
+  if(key==='diplomacy'&&state.player){
+    const target=Object.keys(w.countries).find(id=>id!==state.player);
+    if(target){
+      at(overlay,button('PACTO DE NO AGRESIÓN',205,42,action(async()=>{
+        const r=await sim.send('treaty',{country:state.player,target,type:'nonAggression'});state.world=r.world;state.news=r.result.accepted?'Pacto firmado':'Propuesta rechazada';draw();})),390,495);
+      at(overlay,button('PROPONER TREGUA',175,42,action(async()=>{
+        const r=await sim.send('treaty',{country:state.player,target,type:'truce'});state.world=r.world;state.news=r.result.accepted?'Tregua firmada':'Propuesta rechazada';draw();})),610,495);
+    }
+  }
+  if(key==='editor')at(overlay,button('EXPORTAR ESCENARIO',205,42,action(()=>{
+    const blob=new Blob([JSON.stringify({version:1,world:w},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob);
+    const a=document.createElement('a');a.href=url;a.download=`regnaxis-dia-${w.day}.json`;a.click();URL.revokeObjectURL(url);
+  })),390,495);
   if(key==='replay'){
     at(overlay,button('GUARDAR PARTIDA',190,45,action(()=>{saveGame();draw();})),391,500);
     at(overlay,button('CARGAR PARTIDA',190,45,action(loadGame)),596,500);
@@ -197,7 +213,7 @@ function settings(){chrome(tr('settings'));
 }
 
 function draw(){clear(scene);clear(overlay);background(performance.now());
-  if(state.scene==='boot')boot();else if(state.scene==='menu')menu();else if(state.scene==='select')selectCountry();
+    if(state.scene==='boot')boot();else if(state.scene==='menu')menu();else if(state.scene==='select')selectCountry();
   else if(state.scene==='settings')settings();else if(state.scene==='game')game();}
 
 app.renderer.events.setTargetElement(canvas);
