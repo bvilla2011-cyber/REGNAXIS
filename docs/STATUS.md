@@ -3,10 +3,10 @@
 | Fase | Estado | Evidencia |
 |---|---|---|
 | 0 · Limpieza | Completada | Commit `chore: wipe repository`; respaldo del commit anterior en la rama remota `backup-before-world-dominion` y etiqueta git local homónima. |
-| 1 · Investigación | En curso | GDD, análisis de reseñas y atribuciones nuevas. |
-| 2 · Núcleo | Pendiente | Mapa y simulación. |
+| 1 · Investigación | Completada (alcance accesible) | GDD, análisis de reseñas y atribuciones nuevos; la tienda no permite garantizar lectura de todas las reseñas históricas. |
+| 2 · Núcleo | En curso | Simulación original de puntos, anexión, ejército, economía y victoria; falta mapa mundial y ejecución en worker. |
 | 3 · Diplomacia e IA | Pendiente | Reglas y agentes. |
-| 4 · Interfaz | Pendiente | Escenas Canvas/WebGL. |
+| 4 · Interfaz | En curso | Prototipo Canvas jugable; faltan escenas y dirección artística completas. |
 | 5 · Modos y editor | Pendiente | Escenarios, scripts, guardados. |
 | 6 · Marina | Pendiente | Flotas y mejoras. |
 | 7 · Multijugador | Pendiente | Local y salas. |

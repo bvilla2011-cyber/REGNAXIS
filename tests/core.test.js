@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {createWorld,ranking} from '../src/sim/world.js';import {annex,undoAnnex,quote,recruit} from '../src/sim/army.js';import {advance} from '../src/sim/engine.js';
+const make=()=>createWorld({countries:{A:{treasury:1000},B:{treasury:1000}},cells:{x:{controller:'A',neighbors:['y']},y:{controller:'B',neighbors:['x']}},points:[{id:'a',cell:'x',gdp:50,population:100},{id:'b',cell:'y',gdp:50,population:100}],armies:[{id:'u',country:'A',cell:'x',type:'infantry',strength:100,morale:100,equipment:1}],rules:{victoryHoldDays:2}});
+test('anexión progresiva y deshacer',()=>{const w=make();for(let i=0;i<5;i++)annex(w,'u','y');assert.equal(w.cells.y.controller,'A');assert.equal(ranking(w)[0].share,1);assert.equal(undoAnnex(w),true);assert.equal(w.cells.y.controller,'B');});
+test('victoria exige mayoría estricta y plazo',()=>{const w=make();advance(w,3);assert.equal(w.winner,null);w.armies[0].order={kind:'attack',target:'y'};advance(w,8);assert.equal(w.winner,'A');});
+test('coste explicado y economía finita',()=>{const w=make(),price=quote(w,'A','infantry');assert.ok(price.total>0);recruit(w,'A','infantry','x');advance(w,30);assert.ok(Number.isFinite(w.countries.A.gdp));assert.ok(Number.isFinite(w.countries.A.treasury));});
