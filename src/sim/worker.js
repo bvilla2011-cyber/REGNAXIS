@@ -3,6 +3,7 @@ import {createWorld, ranking} from './world.js';
 import {orderArmy, recruit, splitArmy, undoAnnex} from './army.js';
 import {proposeTreaty,breakTreaty,declareWar,negotiatePeace} from './diplomacy.js';
 import {invest} from './research.js';
+import {buildShip,orderFleet} from './navy.js';
 
 let world = null;
 const actions={
@@ -18,6 +19,8 @@ const actions={
   declareWar: payload => ({result:declareWar(world,payload.country,payload.target),world:snapshot(world)}),
   peace: payload => {negotiatePeace(world,payload.country,payload.target,payload.terms);return {world:snapshot(world)};},
   research: payload => ({result:invest(world,payload.country,payload.project,payload.options),world:snapshot(world)}),
+  buildShip: payload => ({fleet:buildShip(world,payload.country,payload.type,payload.sea),world:snapshot(world)}),
+  fleetOrder: payload => {orderFleet(world,payload.fleet,payload.kind,payload.target);return {world:snapshot(world)};},
   state: () => ({world:snapshot(world),ranking:ranking(world)})
 };
 
