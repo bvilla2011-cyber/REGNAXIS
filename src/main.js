@@ -196,6 +196,17 @@ function drawPanel(){const key=state.panel,w=state.world,c=state.player?w.countr
     const blob=new Blob([JSON.stringify({version:1,world:w},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob);
     const a=document.createElement('a');a.href=url;a.download=`regnaxis-dia-${w.day}.json`;a.click();URL.revokeObjectURL(url);
   })),390,495);
+  if(key==='editor')at(overlay,button('IMPORTAR ESCENARIO',205,42,action(async()=>{
+    const raw=prompt('Pega aquí un escenario REGNAXIS exportado:');if(!raw)return;
+    const parsed=JSON.parse(raw);const candidate=parsed.world??parsed;
+    const loaded=await sim.send('load',candidate);state.world=loaded.world;state.timeline=[structuredClone(loaded.world)];
+    state.scene='game';state.panel=null;state.paused=true;draw();
+  })),610,495);
+  if(key==='profile'&&state.world)at(overlay,button('PASAR TURNO AL OTRO JUGADOR',265,42,action(()=>{
+    const ids=Object.keys(state.world.countries),next=ids.find(id=>id!==state.player);
+    if(!next){state.news='No hay otro país disponible';return;}
+    state.player=next;state.paused=true;state.panel=null;state.news=`Turno de ${state.world.countries[next].name}`;draw();
+  })),390,495);
   if(key==='replay'){
     at(overlay,button('GUARDAR PARTIDA',190,45,action(()=>{saveGame();draw();})),391,500);
     at(overlay,button('CARGAR PARTIDA',190,45,action(loadGame)),596,500);
@@ -226,6 +237,8 @@ let pinch=null;canvas.addEventListener('touchmove',e=>{if(e.touches.length===2&&
 addEventListener('keydown',e=>{if(e.key==='Escape'&&state.panel){state.panel=null;draw();}
   if(e.key===' '&&state.scene==='game'){e.preventDefault();state.paused=!state.paused;draw();}});
 draw();setTimeout(()=>{state.scene='menu';draw();},650);
+const manifestLink=document.createElement('link');manifestLink.rel='manifest';manifestLink.href='./manifest.webmanifest';document.head.append(manifestLink);
+if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
 let last=performance.now(),acc=0;
 app.ticker.add(async ticker=>{const now=performance.now(),delta=Math.min(now-last,100);last=now;
   if(state.scene!=='game'||state.paused||state.busy)return;
