@@ -5,6 +5,7 @@ import {checkVictory, ranking, recalculate} from '../src/sim/world.js';
 import {orderArmy, splitArmy, moveArmies, undoAnnex, recruit, recruitmentQuote} from '../src/sim/army.js';
 import {economyDay} from '../src/sim/economy.js';
 import {stepDays, snapshot, restore} from '../src/sim/engine.js';
+import {buildSpatialIndex,querySpatial} from '../src/sim/spatial.js';
 
 test('victory requires strict GDP majority held for configured days',()=>{
   const world=createDemoWorld({rules:{victoryHoldDays:2}});
@@ -66,4 +67,11 @@ test('same seed and commands yield identical worlds; snapshot restores independe
   const saved=snapshot(a);
   stepDays(a,1);
   assert.deepEqual(restore(saved),b);
+});
+
+test('spatial index finds only points inside a touch radius',()=>{
+  const items=Array.from({length:100},(_,i)=>({id:i,x:i%10*10,y:Math.floor(i/10)*10}));
+  const tree=buildSpatialIndex(items,{x:0,y:0,width:100,height:100},4);
+  assert.deepEqual(querySpatial(tree,50,50,1).map(p=>p.id),[55]);
+  assert.equal(querySpatial(tree,50,50,11).length,5);
 });

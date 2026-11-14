@@ -8,7 +8,7 @@ Actualizado: 14 de noviembre de 2026.
 |---|---|---|
 | 0 · Preparación | Completada | Repositorio nuevo, vacío y verificado; no requería limpieza ni respaldo |
 | 1 · Investigación y GDD | Completada | Análisis de reseñas, GDD, fuentes y licencias |
-| 2 · Núcleo | Completada (base funcional) | Mapa de células y puntos, reloj, simulación determinista, economía, ejércitos, anexión y pruebas |
+| 2 · Núcleo | Completada (base funcional) | Mapa de células y puntos, índice espacial, worker, reloj, simulación determinista, economía, ejércitos, anexión y pruebas |
 | 3 · Diplomacia, investigación e IA | Pendiente | Tratados, árbol tecnológico e IA explicable |
 | 4 · Interfaz completa | Pendiente | Escenas Canvas/WebGL, HUD y dirección artística UniFormer |
 | 5 · Modos, editor, repeticiones y scripts | Pendiente | Modos, escenarios, editor y guardado por instantáneas |
@@ -29,4 +29,4 @@ Actualizado: 14 de noviembre de 2026.
 
 ## Próximo punto de control
 
-La próxima acción es la fase 3: diplomacia, investigación e IA. El mapa global, el worker y la representación visual siguen pendientes de integración; la fase 2 entrega una base funcional comprobable con un mundo de prueba ficticio.
+La próxima acción es la fase 3: diplomacia, investigación e IA. El mapa global de datos abiertos y la representación visual siguen pendientes de integración; la fase 2 entrega una base funcional comprobable con un mundo de prueba ficticio.
