@@ -9,7 +9,7 @@ Actualizado: 14 de noviembre de 2026.
 | 0 · Preparación | Completada | Repositorio nuevo, vacío y verificado; no requería limpieza ni respaldo |
 | 1 · Investigación y GDD | Completada | Análisis de reseñas, GDD, fuentes y licencias |
 | 2 · Núcleo | Completada (base funcional) | Mapa de células y puntos, índice espacial, worker, reloj, simulación determinista, economía, ejércitos, anexión y pruebas |
-| 3 · Diplomacia, investigación e IA | Pendiente | Tratados, árbol tecnológico e IA explicable |
+| 3 · Diplomacia, investigación e IA | Completada (base funcional) | Relaciones, tratados y paz, investigación con proyectos emparejados, planificador determinista con razones |
 | 4 · Interfaz completa | Pendiente | Escenas Canvas/WebGL, HUD y dirección artística UniFormer |
 | 5 · Modos, editor, repeticiones y scripts | Pendiente | Modos, escenarios, editor y guardado por instantáneas |
 | 6 · Marina y mejoras de reseñas | Pendiente | Flotas, desembarcos, estrechos y accesibilidad |
@@ -29,4 +29,4 @@ Actualizado: 14 de noviembre de 2026.
 
 ## Próximo punto de control
 
-La próxima acción es la fase 3: diplomacia, investigación e IA. El mapa global de datos abiertos y la representación visual siguen pendientes de integración; la fase 2 entrega una base funcional comprobable con un mundo de prueba ficticio.
+La próxima acción es la fase 4: interfaz del juego dentro de Canvas/WebGL y conexión del mapa y controles a la simulación. El mapa global de datos abiertos, sistemas de gobierno completos, IA naval y escenarios históricos siguen pendientes de fases posteriores. La base funcional aún usa un mundo de prueba ficticio.

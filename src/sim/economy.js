@@ -20,7 +20,8 @@ export function economyDay(world) {
     const overspend = Math.max(0,b.research+b.military+b.social-b.tax);
     const growth = world.rules.growthBase*convergence+(c.policyGrowth??0)
       -overspend*world.rules.fiscalDrag-Math.max(0,(c.inflation??0)-0.03)*world.rules.inflationDrag;
-    const migration = clamp((b.social-0.06)*world.rules.socialMigrationFactor, -0.002,0.002);
+    const migration = clamp((b.social-0.06)*world.rules.socialMigrationFactor+
+      (c.research?.effects?.migration??0), -0.002,0.002);
     for (const p of world.points.filter(p=>world.cells[p.cell].controller===id)) {
       p.gdp=Math.max(0,p.gdp*(1+growth/365));
       p.population=Math.max(0,p.population*(1+(world.rules.annualPopulationGrowth+migration)/365));

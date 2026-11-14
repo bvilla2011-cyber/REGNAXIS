@@ -1,4 +1,5 @@
 import {clamp, recalculate} from './world.js';
+import {declareWar} from './diplomacy.js';
 
 export const UNIT_TYPES = Object.freeze({
   infantry: {cost: 100, upkeep: 0.012, days: 12, strength: 100, speed: 1},
@@ -94,11 +95,7 @@ export function annex(world, army, target) {
   const advance = world.rules.annexBase * (UNIT_TYPES[army.type]?.speed ?? 1) *
     (army.supply ?? 1) * army.morale / 100 * superiority ** 0.35 *
     (cell.terrainFactor ?? 1) / (1 + resistance * world.rules.resistanceWeight);
-  if (!world.countries[army.country].wars?.includes(cell.controller)) {
-    (world.countries[army.country].wars ??= []).push(cell.controller);
-    (world.countries[cell.controller].wars ??= []).push(army.country);
-    world.events.push({day: world.day,type:'war',attacker:army.country,defender:cell.controller});
-  }
+  if (!world.countries[army.country].wars?.includes(cell.controller)) declareWar(world,army.country,cell.controller);
   cell.progress = (cell.progress ?? 0) + advance;
   if (resistance > world.rules.militiaThreshold) {
     army.strength = Math.max(1, army.strength * (1 - world.rules.militiaDamage * resistance));
