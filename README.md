@@ -21,6 +21,14 @@ El proyecto está en preproducción. Consulta [docs/STATUS.md](docs/STATUS.md) p
 
 Se utilizará **PixiJS 8** porque ofrece renderizado WebGL/WebGPU ligero, control total de una interfaz dibujada dentro del juego y menos estructura impuesta que un motor centrado en escenas arcade.
 
+## Ejecutar el prototipo
+
+Requiere Node.js 20 o superior. Ejecuta `npm install` y luego `npm run dev`; abre la dirección local indicada por Vite. `npm test` comprueba las reglas y `npm run build` crea la versión estática en `dist/`.
+
+La interfaz actual es un prototipo Canvas/WebGL conectado a un mundo ficticio de tres zonas. Permite elegir Aurel o Bruma, observar la IA, seleccionar territorio, pausar, reclutar, ordenar ataques y consultar datos básicos. Las pantallas de editor, repeticiones, perfil y estadísticas avanzadas aún son marcadores de posición. No hay mapa mundial ni salas online todavía.
+
+Para el logo definitivo, coloca la imagen oficial en `assets/uniformer-logo.png` durante la fase de pulido. `assets/uniformer-placeholder.svg` es un marcador original.
+
 ## Licencia
 
 Código y recursos propios: todos los derechos reservados por UniFormer Studio mientras se decide la licencia pública definitiva. Las fuentes de datos mantienen sus licencias originales.
