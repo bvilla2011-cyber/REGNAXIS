@@ -1,0 +1,10 @@
+# Fuentes, créditos y licencias
+
+- Diseño, código, interfaz, SVG y sonidos de REGNAXIS: creación original de UniFormer Studio.
+- [Natural Earth](https://www.naturalearthdata.com/about/terms-of-use/): geometrías cartográficas de dominio público. Registrar aquí versión, escala y fecha al incorporar los archivos.
+- [Banco Mundial](https://data.worldbank.org/): indicadores económicos y demográficos; atribución al Banco Mundial y a cada fuente primaria indicada por el conjunto descargado. Registrar códigos de indicadores y año de observación por país.
+- [ONU, World Population Prospects](https://population.un.org/wpp/): proyecciones demográficas sujetas a sus condiciones de reutilización y atribución, a verificar antes de incorporarlas.
+- [FMI, WEO](https://www.imf.org/en/Publications/WEO/weo-database): estimaciones y proyecciones; verificar condiciones de reutilización de los datos concretos antes de empaquetarlos.
+- [Guía oficial de Dummynation](https://dummynation.ahfgames.com/guide/) y fichas App Store: solo investigación de mecánicas y opiniones. No se reutiliza contenido expresivo.
+
+Los escenarios históricos requieren fuentes verificables propias por fecha. Ningún dato de 2026 se etiquetará como observado si solo existe una proyección.
