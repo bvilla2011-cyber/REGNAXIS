@@ -5,9 +5,10 @@ export function createDemoWorld(overrides={}) {
   return createWorld({
     countries:{A:{name:'Aurel',treasury:1000,budget:{tax:0.25,research:0.02,military:0.05,social:0.08}},
       B:{name:'Bruma',treasury:800,budget:{tax:0.25,research:0.02,military:0.05,social:0.08}}},
-    cells:{west:{owner:'A',controller:'A',neighbors:['middle'],area:1},
+    cells:{west:{owner:'A',controller:'A',neighbors:['middle','sea'],area:1,coastal:true},
       middle:{owner:'B',controller:'B',neighbors:['west','east'],area:1,resistance:0.2},
-      east:{owner:'B',controller:'B',neighbors:['middle'],area:1}},
+      east:{owner:'B',controller:'B',neighbors:['middle'],area:1},
+      sea:{owner:'A',controller:'A',neighbors:['west'],area:0,sea:true}},
     points:[{id:'p1',cell:'west',gdp:400,population:4_000_000},
       {id:'p2',cell:'middle',gdp:200,population:2_000_000},
       {id:'p3',cell:'east',gdp:400,population:4_000_000}],
