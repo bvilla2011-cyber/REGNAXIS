@@ -12,7 +12,7 @@ const W=1280,H=720;
 const root=new Container(),backdrop=new Container(),scene=new Container(),overlay=new Container();
 app.stage.addChild(root);root.addChild(backdrop,scene,overlay);
 const state={scene:'boot',panel:null,lang:'es',quality:'high',audio:true,world:null,player:'A',selected:'west',
-  camera:{x:0,y:0,scale:1},paused:true,busy:false,news:'',mode:'casual'};
+  camera:{x:0,y:0,scale:1},paused:true,busy:false,news:'',mode:'casual',timeline:[]};
 const sim=new SimulationClient();
 const tr=key=>t(state.lang,key);
 const fmt=value=>new Intl.NumberFormat(state.lang==='es'?'es-ES':'en-US',{maximumFractionDigits:1,notation:'compact'}).format(value??0);
@@ -84,7 +84,13 @@ async function start(player){state.busy=true;state.player=player;state.news='';
     points:[{id:'p1',cell:'west',gdp:400,population:4e6},{id:'p2',cell:'middle',gdp:200,population:2e6},
       {id:'p3',cell:'east',gdp:400,population:4e6}],
     armies:[{id:'a1',country:'A',cell:'west',type:'infantry',strength:100,equipment:1,morale:80,supply:1}],player};
-  const response=await sim.send('init',data);state.world=response.world;state.paused=false;state.scene='game';state.busy=false;draw();}
+  const response=await sim.send('init',data);state.world=response.world;state.timeline=[structuredClone(response.world)];state.paused=false;state.scene='game';state.busy=false;draw();}
+
+function saveGame(){if(!state.world)return;const save={version:1,world:state.world,player:state.player,mode:state.mode,timeline:state.timeline};
+  localStorage.setItem('regnaxis-save-v1',JSON.stringify(save));state.news='PARTIDA GUARDADA EN ESTE DISPOSITIVO';}
+async function loadGame(){const raw=localStorage.getItem('regnaxis-save-v1');if(!raw)throw Error('No hay una partida guardada');
+  const save=JSON.parse(raw);if(save.version!==1)throw Error('Versión de guardado no compatible');
+  const result=await sim.send('load',save.world);state.world=result.world;state.player=save.player;state.mode=save.mode??'casual';state.timeline=save.timeline??[result.world];state.scene='game';state.panel=null;state.paused=true;draw();}
 
 const cellGeometry={west:{x:170,y:320,w:250,h:220},middle:{x:425,y:260,w:260,h:280},east:{x:690,y:295,w:320,h:250}};
 function mapView(){
@@ -144,9 +150,27 @@ function drawPanel(){const key=state.panel,w=state.world,c=state.player?w.countr
     research:[`PUNTOS DISPONIBLES  ${fmt(c?.researchPoints)}`,
       `INDUSTRIA  ${c?.research?.completed?.industry??0}`,`LOGÍSTICA  ${c?.research?.completed?.logistics??0}`],
     ranking:Object.entries(w.countries).sort((a,b)=>b[1].gdp-a[1].gdp).map(([id,v],i)=>`${i+1}. ${v.name}  ·  ${fmt(v.gdp)} PIB`),
-    news:w.events.slice(-5).reverse().map(e=>`${tr('day')} ${e.day}  ·  ${e.type.toUpperCase()}`)
+    news:w.events.slice(-5).reverse().map(e=>`${tr('day')} ${e.day}  ·  ${e.type.toUpperCase()}`),
+    charts:[] , editor:['EDITOR DE ESCENARIO','Puntos económicos: '+w.points.length,'Territorios: '+Object.keys(w.cells).length],
+    replay:['REPETICIÓN LOCAL',`Día actual: ${w.day}`, `Instantáneas disponibles: ${state.timeline.length}`,
+      ...state.timeline.slice(-5).reverse().map(s=>`DÍA ${s.day} · PIB A ${fmt(s.countries.A?.gdp)} · PIB B ${fmt(s.countries.B?.gdp)}`)],
+    profile:['PERFIL LOCAL','Comandante REGNAXIS','Partida sin conexión']
   };
-  (lines[key]?.length?lines[key]:[tr('noData')]).forEach((line,i)=>addText(overlay,line,394,239+i*43,16,C.text));
+  if(key==='charts'){
+    const chart=new Graphics();
+    chart.moveTo(405,450).lineTo(855,450).moveTo(405,450).lineTo(405,265)
+      .stroke({color:C.muted,alpha:.7,width:1});
+    const countries=Object.entries(w.countries),max=Math.max(1,...countries.map(([,v])=>v.gdp));
+    for(const [i,[id,v]] of countries.entries()){
+      const color=id==='A'?C.accent:C.red,barX=470+i*165,height=Math.max(8,155*v.gdp/max);
+      chart.roundRect(barX,450-height,72,height,6).fill({color,alpha:.82});
+      addText(overlay,v.name,barX-5,461,13,C.text,'700');
+      addText(overlay,fmt(v.gdp),barX,430-height,12,C.gold);
+    }
+    for(let i=1;i<=3;i++)chart.moveTo(405,450-i*46).lineTo(850,450-i*46).stroke({color:C.accent,alpha:.1,width:1});
+    overlay.addChild(chart);addText(overlay,'PIB POR PAÍS · ACTUAL',420,220,13,C.muted,'700');
+  }
+  if(key!=='charts')(lines[key]?.length?lines[key]:[tr('noData')]).forEach((line,i)=>addText(overlay,line,394,239+i*43,16,C.text));
   if(key==='military'&&state.player){
     at(overlay,button(tr('recruit'),145,49,action(async()=>{const cell=Object.keys(w.cells).find(id=>w.cells[id].controller===state.player);
       const r=await sim.send('recruit',{country:state.player,type:'infantry',cell});state.world=r.world;draw();})),391,500);
@@ -156,6 +180,10 @@ function drawPanel(){const key=state.panel,w=state.world,c=state.player?w.countr
   }
   if(key==='research'&&state.player)at(overlay,button('INDUSTRIA  20 RP',200,49,action(async()=>{
     const r=await sim.send('research',{country:state.player,project:'industry'});state.world=r.world;draw();})),393,500);
+  if(key==='replay'){
+    at(overlay,button('GUARDAR PARTIDA',190,45,action(()=>{saveGame();draw();})),391,500);
+    at(overlay,button('CARGAR PARTIDA',190,45,action(loadGame)),596,500);
+  }
 }
 
 function settings(){chrome(tr('settings'));
@@ -186,6 +214,8 @@ let last=performance.now(),acc=0;
 app.ticker.add(async ticker=>{const now=performance.now(),delta=Math.min(now-last,100);last=now;
   if(state.scene!=='game'||state.paused||state.busy)return;
   acc+=delta;if(acc<1000)return;acc=0;state.busy=true;
-  try{const r=await sim.send('step',{days:1,mode:state.mode});state.world=r.world;draw();}
+  try{const r=await sim.send('step',{days:1,mode:state.mode});state.world=r.world;
+    if(state.world.day%10===0){state.timeline.push(structuredClone(state.world));if(state.timeline.length>60)state.timeline.shift();}
+    draw();}
   catch(err){state.news=err.message;state.paused=true;draw();}finally{state.busy=false;}
 });
