@@ -6,7 +6,7 @@ export const deepCopy = value => structuredClone(value);
 export function createWorld({countries, cells, points, armies = [], rules = {}, seed = 1, player = null}) {
   const world = {version: 1, day: 0, hour: 0, seed: seed >>> 0, player,
     rules: rulesWith(rules), countries: deepCopy(countries), cells: deepCopy(cells),
-    points: deepCopy(points), armies: deepCopy(armies), training: [], events: [],
+    points: deepCopy(points), armies: deepCopy(armies), fleets: [], blockades: [], training: [], events: [],
     annexHistory: [], victoryStreak: {}, winner: null};
   validateWorld(world);
   recalculate(world);
