@@ -4,6 +4,7 @@ import {economyDay} from './economy.js';
 import {diplomacyDay} from './diplomacy.js';
 import {researchDay} from './research.js';
 import {runAI} from '../ai/planner.js';
+import {navyDay} from './navy.js';
 
 export function stepHour(world, mode='casual') {
   if (world.winner) return world;
@@ -12,6 +13,7 @@ export function stepHour(world, mode='casual') {
     world.hour=0;
     world.day++;
     moveArmies(world);
+    navyDay(world);
     advanceTraining(world);
     economyDay(world);
     researchDay(world);
