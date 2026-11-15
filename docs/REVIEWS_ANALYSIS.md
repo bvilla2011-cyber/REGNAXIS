@@ -21,3 +21,17 @@ Fuentes consultadas: [App Store US](https://apps.apple.com/us/app/dummynation/id
 | ES/EN, accesibilidad y tamaño inicial | Lista base | Catálogo i18n, filtros de color, escala tipográfica y paquete inicial inferior a 5 MB. |
 
 Las notas de versión recientes mencionan gráficas, edición de investigación y scripts; se consideran referencia de cobertura funcional, no fuente de textos ni fórmulas.
+
+## Revisión de noviembre de 2026
+
+Se volvió a consultar la guía oficial y las fichas regionales de App Store. GB y US muestran reseñas y notas; ES muestra comentarios de errores y actualización de armamento; IE devolvió 429. El wiki no permitió acceso automatizado. La tienda expone una selección, no la totalidad histórica de reseñas: no es posible afirmar un recuento exhaustivo.
+
+| Petición o queja | Frecuencia verificable | Cómo se resuelve |
+|---|---|---|
+| Guerras de IA aparentemente arbitrarias | Usuario actual; categoría recurrente en análisis previo | Umbral de utilidad, relaciones, defensa del objetivo, avisos y razones de decisión. |
+| Países aliados y miembros de UE enfrentados sin coste | Usuario actual | Afinidad de bloque, pactos iniciales, condena conjunta y defensa colectiva configurable. |
+| Comercio poco visible | Usuario actual | Rutas con origen/destino, ingreso diario, coste de apertura y bloqueo por guerra. |
+| Zoom y arrastre atraviesan el límite del mapa | Usuario actual | Zoom acotado y cámara confinada a superficie cartográfica. |
+| HUD poco legible | Usuario actual | Jerarquía, saldo, velocidad, fecha y noticias con mayor contraste. |
+| Pantalla negra/audio tras cerrar en iPhone | Reseña ES accesible | Reanudación segura del bucle y suspensión de audio con `visibilitychange`. |
+| Datos de armamento desactualizados | Reseña ES accesible | Parámetros visibles y editables; no presentar cifras sintéticas como reales. |

@@ -58,3 +58,13 @@ Canvas 2D propio se usa en el prototipo por el control directo de escenas y un a
 | `snapshotInterval` | 30 | días |
 
 Las cifras son valores originales de equilibrio, no equivalencias verificadas del juego de referencia; se ajustarán con partidas y tests.
+
+## Revisión de equilibrio 2026-11-15
+
+La IA solo considera guerra si `relación < 42`, no existe tregua/no agresión/alianza/defensa/comercio, la utilidad territorial supera el umbral y su fuerza prevista es superior al riesgo. `utilidad = 0.035 × PIB objetivo + 0.12 × fuerza propia − 0.17 × defensa − 0.9 × relación − penalización bloque − riesgo tesoro`; una guerra no puede empezar sin orden explícita y se avisa al jugador en el diario. Todos los coeficientes son reglas originales configurables.
+
+Bloque UE: los miembros de la lista editable empiezan con relación 84 y pacto defensivo. Agredir a un miembro reduce la relación entre el agresor y cada otro miembro en 35 y eleva su hostilidad; los miembros que aceptan defensa se incorporan a la guerra. La defensa colectiva se desactiva en escenarios personalizados y no modifica parejas ajenas al bloque. Los acuerdos de comercio no se activan durante guerra y un embargo los suspende.
+
+Ruta comercial bilateral `ingreso diario = min(PIB_A, PIB_B) × tasaComercial / 365 × factorRelación × factorAcceso`; cada socio cobra una fracción y la ruta registra volumen, estado y motivo de suspensión. Apertura exige relación ≥ 45 y gasto del tesoro. Mantenimiento del ejército se paga por día: la falta de pago reduce equipo, moral y productividad; financiación militar reduce desgaste. Las colas de entrenamiento avanzan diariamente en paralelo hasta capacidad configurada. Hora simulada mostrada como fecha desde 2026-01-01, un día por paso; la velocidad del juego solo altera cuántos pasos se procesan por segundo, no las fórmulas.
+
+La cámara está limitada en zoom y traslación para preservar cobertura del mapamundi sin dejar océano vacío ocupando la pantalla. En cada modo de calidad se evita repintar geometría fuera del área visible. El HUD usa un tiempo de simulación explícito y desglosa saldo y progreso. Las cifras sintéticas permanecen etiquetadas como tales hasta importación verificada de indicadores oficiales.

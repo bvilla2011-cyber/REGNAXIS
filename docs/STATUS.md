@@ -17,3 +17,4 @@ La etiqueta aún no está publicada en GitHub porque el conector no expone creac
 ## Ampliación solicitada el 15 de noviembre de 2026
 
 Fase 0: auditoría realizada en `docs/AUDIT.md`. Respaldo: etiqueta local y rama remota `backup-before-dummynation-upgrade` en `21c6d201`.
+Fase 1: fuentes consultadas de nuevo; acceso parcial a App Store, wiki bloqueado, reglas de equilibrio y peticiones incorporadas al GDD y análisis.
