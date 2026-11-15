@@ -6,6 +6,8 @@ Gran estrategia geopolítica en tiempo real con simulación determinista. Códig
 
 ## Datos y mundo
 
+Estado implementado en el prototipo: geometrías Admin 0 de Natural Earth 1:50m mediante `world-atlas` 2.0.2, 240 países y territorios jugables y Antártida no jugable; selección alfabética por nombres españoles. Cada país es todavía una célula de simulación y recibe un punto sintético. El PIB y la población se derivan provisionalmente del área cartográfica y una semilla por identificador; no son datos reales. Las islas sin vecinos terrestres reciben dos enlaces por proximidad como rutas marítimas abstractas. La siguiente iteración debe reemplazar estos valores por indicadores por año y descomponer cada país en puntos espaciales sin convertir la cartografía en provincias.
+
 Geometría Natural Earth simplificada en polígonos, índice R-tree/quad-tree, puntos de recursos y población con coordenadas geográficas. Un punto pertenece al controlador de la superficie que contiene su posición. `PIB país = Σ(PIB punto × productividad × control)`; `población país = Σ población punto`. Conquista progresiva: cada célula espacial de ocupación acumula `progreso += tasaBase × poderAtacante / max(1,poderDefensor) × suministro × moral / (1+resistencia)`. Al completar 1, transfiere sus puntos, registra la acción reversible y genera resistencia. Milicia diaria `p = base × resistencia × poblaciónLocal / escala`, con semilla determinista.
 
 ## Victoria y modos
@@ -40,7 +42,7 @@ Editor táctil de polígonos, países, banderas, recursos, tropas, gobiernos y r
 
 ## Interfaz y entrega
 
-PixiJS se elige por su renderizado WebGL y control directo de todas las escenas en Canvas. Boot, Menú, Selección, Partida, Editor, Repeticiones y Ajustes; paneles biselados, rejilla, neón, iconos SVG originales y audio sintetizado WebAudio. ES/EN, escala tipográfica, paletas accesibles y controles táctiles. Calidad alta/media/baja. PWA sin anuncios ni seguimiento. Presupuesto inicial de transferencia menor que 5 MB. Tests de reglas y pruebas de carga verifican cada hito. Variables CSS definen paleta; `assets/uniformer-logo.png` es opcional con marcador SVG original.
+Canvas 2D propio se usa en el prototipo por el control directo de escenas y un atlas precalculado de bajo peso. Boot, Menú, Selección, Partida, Editor, Repeticiones y Ajustes; paneles biselados, rejilla, neón, iconos SVG originales y audio sintetizado WebAudio. ES/EN, escala tipográfica, paletas accesibles y controles táctiles. Calidad alta/media/baja. PWA sin anuncios ni seguimiento. Presupuesto inicial de transferencia menor que 5 MB. Tests de reglas y pruebas de carga verifican cada hito. Variables CSS definen paleta; `assets/uniformer-logo.png` es el logo proporcionado.
 
 ## Parámetros iniciales
 
