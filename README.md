@@ -12,6 +12,8 @@ npm run build:world # Regenera el atlas local desde world-atlas
 
 La pantalla pública prevista es [GitHub Pages](https://bvilla2011-cyber.github.io/REGNAXIS/). Sin anuncios, compras ni seguimiento.
 
-Al iniciar, elige un país de la lista alfabética o tócalo en el mapa; usa los botones para recorrer la lista, la rueda para desplazarte y acercar el mapa, y arrastra o pellizca con los dedos. El teclado permite escribir las primeras letras del país, usar flechas y confirmar con Intro. La partida se inicia con el ejército y la economía del país elegido. Los valores de PIB y población son **provisionales y sintéticos**; no representan cifras oficiales del Banco Mundial ni datos de 2026. Las islas sin frontera terrestre tienen rutas marítimas abstractas en este prototipo.
+En el menú elige Dominación y la dificultad, luego un país de la lista alfabética o del mapa. En partida, la cámara se centra en tu nación; toca un país para inspeccionarlo y tu insignia para seleccionar un ejército. Arrastra y pellizca el mapa. El HUD abre centros Militar, Economía, Diplomacia, Investigación y Ranking. Las órdenes se ejecutan en días simulados: una invasión muestra un frente que avanza y se desgasta ante defensores. Pausa, guardado y carga funcionan en el dispositivo. El teclado permite escribir las primeras letras del país, usar flechas e Intro en la selección; Espacio pausa, 1–3 cambian velocidad y F centra la cámara.
+
+Los valores de PIB y población son **provisionales y sintéticos**; no representan cifras oficiales del Banco Mundial ni datos de 2026. Las islas sin frontera terrestre tienen rutas marítimas abstractas en este prototipo. Los menús y controles observados en el vídeo aportado solo informan el flujo; la identidad, el diseño y los elementos gráficos son propios.
 
 El motor usa Canvas 2D propio con un mapa precalculado para mantener el renderizado ligero. La arquitectura modular separa la simulación de la presentación.
