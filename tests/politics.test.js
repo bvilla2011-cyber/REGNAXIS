@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {newWorld} from '../src/data/worldScenario.js';import {strike} from '../src/sim/nuclear.js';import {politicsDay} from '../src/sim/politics.js';
+test('gobiernos y líderes se inicializan y estabilidad evoluciona',()=>{const w=newWorld('724');const c=w.countries['724'];assert.ok(c.leader.name&&c.government);const before=c.stability;w.day=30;politicsDay(w);assert.notEqual(c.stability,before);});
+test('ataque nuclear daña puntos y desencadena represalia',()=>{const w=newWorld('840'),p=w.points.find(p=>p.cell==='643'),before=p.population;strike(w,'840','643');assert.ok(p.population<before);assert.equal(w.countries['840'].nuclearStock,0);assert.ok(w.events.filter(e=>e.type==='nuclear').length>=2);});

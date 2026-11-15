@@ -1,6 +1,8 @@
 import {initializeBlocs} from './blocs.js';
 import atlas from './world-countries.json?map-v2' with {type:'json'};
 import {createWorld} from '../sim/world.js';
+import {recordFrame} from '../core/timeline.js';
+import {initializePolitics} from '../sim/politics.js';
 
 export const countries=atlas.filter(country=>country.id!=='010');
 export const byId=new Map(countries.map(country=>[country.id,country]));
@@ -25,5 +27,5 @@ export function newWorld(playerId){
   // Links are bidirectional. These sea links let isolated islands take part in the prototype.
   for(const [id,cell] of Object.entries(cells))for(const neighbor of cell.neighbors)if(!cells[neighbor].neighbors.includes(id)){cells[neighbor].neighbors.push(id);cells[neighbor].seaRoutes.push(id);}
   const armies=playerId?[{id:'u-player',country:playerId,cell:playerId,type:'infantry',strength:100,morale:80,equipment:1}]:[];
-  const world=createWorld({countries:states,cells,points,armies});world.player=playerId;world.fleets=[];initializeBlocs(world);world.dataStatus='provisional-synthetic-economy';return world;
+  const world=createWorld({countries:states,cells,points,armies});world.player=playerId;world.fleets=[];initializeBlocs(world);initializePolitics(world);world.dataStatus='provisional-synthetic-economy';recordFrame(world,true);return world;
 }

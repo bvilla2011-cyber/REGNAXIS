@@ -1,0 +1,40 @@
+name: Package REGNAXIS apps
+on:
+  workflow_dispatch:
+jobs:
+  desktop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci && npm test && npm run build
+      - run: npm install --no-save electron@latest @electron/packager@latest
+      - run: npx @electron/packager . REGNAXIS --platform=linux --arch=x64 --out=desktop-release --overwrite --ignore='^/node_modules/.cache'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: REGNAXIS-linux-desktop
+          path: desktop-release/REGNAXIS-linux-x64/
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+      - run: npm ci && npm test && npm run build
+      - run: npm install --no-save @capacitor/core@latest @capacitor/cli@latest @capacitor/android@latest
+      - run: npx cap add android && npx cap sync android
+      - run: cd android && chmod +x gradlew && ./gradlew assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: REGNAXIS-android-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk

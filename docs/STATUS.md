@@ -22,3 +22,6 @@ Fase 2: entrenamiento diario, mantenimiento, comercio bilateral y cámara acotad
 Fase 3: bloque UE, reacción defensiva, criterios de guerra de IA y árbol ampliado de investigación con asignación diaria; pruebas de estos comportamientos añadidas.
 Fase 4: HUD jerarquizado, fecha, alertas, páginas de unidades/tratados/investigación dentro de Canvas. La accesibilidad y algunas pantallas siguen pendientes.
 Fase 6: cinco clases navales, movimiento por rutas costeras, bloqueo de comercio y desembarco basado en anexión; IA naval y estrechos precisos aún pendientes.
+Fase 5: editor táctil de puntos y control, escenario JSON validado, scripts de lista blanca y repetición por hitos. Faltan polígonos editables, galería persistente y salto exacto entre instantáneas.
+Fase 7: pasar y jugar local y transporte abstracto; salas online con código/contraseña pendientes de backend y configuración. La conexión Appwrite disponible no tiene proyecto REGNAXIS y el conector no crea proyectos nuevos en esta sesión.
+Fase 8: PWA y workflow manual de artefactos añadidos, tests de simulación y build local. APK y Electron aún no verificados en Actions. No se marcará la equivalencia completa como terminada.

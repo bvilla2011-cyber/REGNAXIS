@@ -14,3 +14,7 @@
 Los escenarios históricos requieren fuentes verificables propias por fecha. Ningún dato de 2026 se etiquetará como observado si solo existe una proyección.
 
 El PIB y la población jugables actuales se generan de forma sintética para probar el motor y se marcan como provisionales dentro del juego. No son indicadores oficiales ni estimaciones de 2026.
+
+## Ampliación de noviembre de 2026
+
+Los bloques, reglas de equilibrio, tratados, iconos de flota en Canvas, textos, simulación y sucesiones de esta versión son implementaciones originales. La lista UE es un dato de escenario basado en identificadores UN M49 y puede editarse; no se usa para inferir la postura real de gobiernos. El PIB, la población y los líderes que se muestran son sintéticos, no estadísticas Banco Mundial, FMI u ONU ni nombres de mandatarios reales. No se han incorporado recursos de terceros nuevos a los ya atribuidos arriba.
