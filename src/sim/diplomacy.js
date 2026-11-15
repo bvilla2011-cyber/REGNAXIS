@@ -1,6 +1,6 @@
-import {sameBloc} from '../data/blocs.js';
-import {openTradeRoute} from './trade.js';
-import {clamp} from './world.js';
+import {sameBloc} from '../data/blocs.js?u2';
+import {openTradeRoute} from './trade.js?u2';
+import {clamp} from './world.js?u2';
 export const TREATIES=Object.freeze({alliance:30,truce:8,nonAggression:12,trade:10,militaryAccess:15,defense:25,protectorate:50,vassalage:60,embargo:8,sanctions:12});
 export function relation(world,a,b){if(a===b||!world.countries[a]||!world.countries[b])throw Error('País inválido');world.diplomacy??={};const key=[a,b].sort().join('|');return world.diplomacy[key]??={value:50,trust:50,treaties:[],atWar:false};}
 export function treaty(world,a,b,type){const pair=relation(world,a,b),base=TREATIES[type];if(base===undefined)throw Error('Tratado inválido');const cost=base*(1+(100-(world.countries[a].standing??100))/100);if((world.countries[a].researchPoints??0)<cost)throw Error('Puntos insuficientes');if(pair.treaties.some(t=>t.type===type))throw Error('Tratado ya activo');if(type==='trade'&&world.countries[a].treasury<world.rules.tradeOpeningCost)throw Error('Tesoro insuficiente');if(pair.value<(type==='alliance'?76:38)&&type!=='truce')return {accepted:false,cost};world.countries[a].researchPoints-=cost;pair.treaties.push({type,day:world.day});pair.value=clamp(pair.value+5,0,100);if(type==='truce')pair.atWar=false;if(type==='trade')openTradeRoute(world,a,b);world.events.push({day:world.day,type:'treaty',a,b,treaty:type});return {accepted:true,cost};}

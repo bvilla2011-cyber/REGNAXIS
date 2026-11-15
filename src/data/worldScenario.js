@@ -1,8 +1,8 @@
-import {initializeBlocs} from './blocs.js';
+import {initializeBlocs} from './blocs.js?u2';
 import atlas from './world-countries.json?map-v2' with {type:'json'};
-import {createWorld} from '../sim/world.js';
-import {recordFrame} from '../core/timeline.js';
-import {initializePolitics} from '../sim/politics.js';
+import {createWorld} from '../sim/world.js?u2';
+import {recordFrame} from '../core/timeline.js?u2';
+import {initializePolitics} from '../sim/politics.js?u2';
 
 export const countries=atlas.filter(country=>country.id!=='010');
 export const byId=new Map(countries.map(country=>[country.id,country]));

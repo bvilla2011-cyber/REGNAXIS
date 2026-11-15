@@ -1,4 +1,4 @@
-import {normalizeRules} from '../data/rules.js';
+import {normalizeRules} from '../data/rules.js?u2';
 export const clamp=(x,min,max)=>Math.max(min,Math.min(max,x));
 export function createWorld({countries,cells,points,armies=[],seed=1,rules={}}){
   const world={version:1,day:0,seed,countries:structuredClone(countries),cells:structuredClone(cells),points:structuredClone(points),armies:structuredClone(armies),rules:normalizeRules(rules),events:[],annexHistory:[],streak:{},winner:null};

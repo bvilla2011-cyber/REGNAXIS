@@ -1,4 +1,4 @@
-import {validate,recalculate} from '../sim/world.js';
+import {validate,recalculate} from '../sim/world.js?u2';
 export function editCountry(world,id,{gdpDelta=0,populationDelta=0,controller}={}){if(!world.countries[id]||!Number.isFinite(gdpDelta)||!Number.isFinite(populationDelta))throw Error('Edición inválida');const points=world.points.filter(p=>p.cell===id);if(!points.length)throw Error('Sin puntos de datos');for(const p of points){p.gdp=Math.max(0,p.gdp+gdpDelta/points.length);p.population=Math.max(0,p.population+populationDelta/points.length);if(controller){if(!world.countries[controller])throw Error('Control inválido');p.controller=controller;}}if(controller)world.cells[id].controller=controller;world.events.push({day:world.day,type:'edit',id,gdpDelta,populationDelta,controller});return recalculate(world);}
 export function editRule(world,key,value){if(!(key in world.rules)||!Number.isFinite(value)||value<0)throw Error('Regla inválida');world.rules[key]=value;return value;}
 export function exportScenario(world){return JSON.stringify({format:'regnaxis-scenario',version:1,world:{...world,timeline:undefined}},null,0);}

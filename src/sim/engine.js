@@ -1,9 +1,9 @@
-import {updateProfile} from '../core/profile.js';
-import {politicsDay,geographicEvent} from './politics.js';
-import {recordFrame} from '../core/timeline.js';import {runScripts} from '../editor/scenario.js';
-import {navalDay} from './navy.js';
-import {tradeDay} from './trade.js';import {relation} from './diplomacy.js';import {sameBloc} from '../data/blocs.js';
-import {trainingDay} from './army.js';import {economyDay} from './economy.js';import {annex} from './army.js';import {victory} from './world.js';import {researchDay} from './research.js';import {runAI} from '../ai/planner.js';
+import {updateProfile} from '../core/profile.js?u2';
+import {politicsDay,geographicEvent} from './politics.js?u2';
+import {recordFrame} from '../core/timeline.js?u2';import {runScripts} from '../editor/scenario.js?u2';
+import {navalDay} from './navy.js?u2';
+import {tradeDay} from './trade.js?u2';import {relation} from './diplomacy.js?u2';import {sameBloc} from '../data/blocs.js?u2';
+import {trainingDay} from './army.js?u2';import {economyDay} from './economy.js?u2';import {annex} from './army.js?u2';import {victory} from './world.js?u2';import {researchDay} from './research.js?u2';import {runAI} from '../ai/planner.js?u2';
 export function day(world,mode='casual'){if(world.winner)return world;world.day++;world.mode=mode;for(const id of world.armies.map(army=>army.id)){const army=world.armies.find(unit=>unit.id===id);if(!army?.order)continue;const o=army.order,target=o.kind==='auto'?world.cells[army.cell].neighbors.find(next=>world.cells[next].controller!==army.country):o.target;if(target&&target!==army.cell&&['attack','auto','move'].includes(o.kind)){if(!world.cells[army.cell].neighbors.includes(target)){army.order=null;continue;}annex(world,army.id,target);}}navalDay(world);economyDay(world);tradeDay(world);trainingDay(world);researchDay(world);if(world.day%30===0)for(const [id,cell] of Object.entries(world.cells))for(const target of cell.neighbors){const rival=world.cells[target].controller;if(id<target&&rival!==cell.controller&&!sameBloc(cell.controller,rival)){const pair=relation(world,cell.controller,rival);if(!pair.atWar&&!pair.treaties.some(t=>['trade','nonAggression','alliance','defense'].includes(t.type))){pair.value=Math.max(28,pair.value-2);if(pair.value===42)world.events.push({day:world.day,type:'tension',a:cell.controller,b:rival});}}}if(world.day%7===0)runAI(world);politicsDay(world);if(world.day%180===0){const ids=Object.keys(world.cells),id=ids[(world.seed+world.day*7)%ids.length];geographicEvent(world,id,.04);}runScripts(world);victory(world,mode);updateProfile(world);recordFrame(world);return world;}
 export function advance(world,days,mode='casual'){if(!Number.isSafeInteger(days)||days<0)throw Error('Días inválidos');for(let i=0;i<days;i++)day(world,mode);return world;}
 export const snapshot=world=>structuredClone(world);

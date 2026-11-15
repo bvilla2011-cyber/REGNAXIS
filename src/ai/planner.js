@@ -1,6 +1,6 @@
-import {relation,treaty} from '../sim/diplomacy.js';
-import {order,recruit} from '../sim/army.js';
-import {sameBloc} from '../data/blocs.js';
+import {relation,treaty} from '../sim/diplomacy.js?u2';
+import {order,recruit} from '../sim/army.js?u2';
+import {sameBloc} from '../data/blocs.js?u2';
 
 export function planAI(world,id){
  const country=world.countries[id];if(!country)return null;

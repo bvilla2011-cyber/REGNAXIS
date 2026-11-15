@@ -1,4 +1,4 @@
-import {clamp,recalculate} from './world.js';
+import {clamp,recalculate} from './world.js?u2';
 export const IDEOLOGIES=Object.freeze({democratic:{growth:.003,stability:3},social:{migration:.002,stability:2},liberal:{trade:.1,growth:.005},authoritarian:{military:.08,stability:-2},neutral:{stability:1}});
 export const GOVERNMENTS=Object.freeze(['republic','parliamentary','monarchy','federation','council']);
 export function initializePolitics(world){const ids=Object.keys(IDEOLOGIES);for(const [id,c] of Object.entries(world.countries)){const seed=[...id].reduce((s,ch)=>s+ch.charCodeAt(0),0);c.ideology=ids[seed%ids.length];c.government=GOVERNMENTS[seed%GOVERNMENTS.length];c.stability=72+seed%18;c.leader={name:`Consejo de ${c.name}`,type:seed%2?'elected':'appointed',trait:seed%3?'pragmatic':'hawk',since:0};c.nuclearStock=['840','643','156','250','826','356','586','408','376'].includes(id)?1:0;}for(const [id,cell] of Object.entries(world.cells))cell.native=id;return world;}
