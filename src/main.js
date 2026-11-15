@@ -12,7 +12,7 @@ import {addLocalPlayer,passTurn} from './net/local.js?u2';
 import {strike} from './sim/nuclear.js?u2';
 import {ACHIEVEMENTS} from './core/profile.js?u2';
 import {countries,byId,newWorld} from './data/worldScenario.js?u2';
-import {atlasById,drawWorldMap,countryAt,armyAt,focusPan,constrainPan,mapViewport} from './ui/worldMap.js?u2';
+import {atlasById,drawWorldMap,countryAt,armyAt,focusPan,constrainPan,mapViewport} from './ui/worldMap.js?u3';
 
 const canvas=document.getElementById('game'),ctx=canvas.getContext('2d'),W=1280,H=720;
 const C=theme;
