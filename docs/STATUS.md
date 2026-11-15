@@ -13,3 +13,7 @@
 | 8 · Publicación | Pendiente | Tests, accesibilidad, PWA y Pages. |
 
 La etiqueta aún no está publicada en GitHub porque el conector no expone creación de tags y la CLI no tiene credenciales; la rama de respaldo remota sí conserva el commit exacto. No se marcará una fase completa sin prueba de sus entregables.
+
+## Ampliación solicitada el 15 de noviembre de 2026
+
+Fase 0: auditoría realizada en `docs/AUDIT.md`. Respaldo: etiqueta local y rama remota `backup-before-dummynation-upgrade` en `21c6d201`.
