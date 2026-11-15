@@ -1,4 +1,4 @@
-import atlas from './world-countries.json' with {type:'json'};
+import atlas from './world-countries.json?map-v2' with {type:'json'};
 import {createWorld} from '../sim/world.js';
 
 export const countries=atlas.filter(country=>country.id!=='010');

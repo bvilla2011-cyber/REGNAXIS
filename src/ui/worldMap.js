@@ -1,7 +1,7 @@
-import atlas from '../data/world-countries.json' with {type:'json'};
+import atlas from '../data/world-countries.json?map-v2' with {type:'json'};
 
 export const atlasById=new Map(atlas.map(item=>[item.id,item]));
-const shapes=atlas.map(item=>{const path=new Path2D();let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;for(const polygon of item.polygons)for(const ring of polygon){ring.forEach(([x,y],i)=>{if(i)path.lineTo(x,y);else path.moveTo(x,y);minX=Math.min(minX,x);maxX=Math.max(maxX,x);minY=Math.min(minY,y);maxY=Math.max(maxY,y);});path.closePath();}return {...item,path,bbox:[minX,minY,maxX,maxY]};});
+const shapes=atlas.map(item=>{const path=item.seamPath?new Path2D(item.seamPath):new Path2D();let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;for(const polygon of item.polygons)for(const ring of polygon){ring.forEach(([x,y],i)=>{if(!item.seamPath){if(i)path.lineTo(x,y);else path.moveTo(x,y);}minX=Math.min(minX,x);maxX=Math.max(maxX,x);minY=Math.min(minY,y);maxY=Math.max(maxY,y);});if(!item.seamPath)path.closePath();}return {...item,path,bbox:[minX,minY,maxX,maxY]};});
 let cache,signature='';
 function hash(id){let value=0;for(const ch of id)value=(value*31+ch.charCodeAt(0))>>>0;return value;}
 function getCanvas(){if(cache)return cache;cache=typeof OffscreenCanvas!=='undefined'?new OffscreenCanvas(1000,500):document.createElement('canvas');cache.width=1000;cache.height=500;return cache;}

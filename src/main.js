@@ -1,8 +1,8 @@
 import {ranking,validate} from './sim/world.js';
 import {advance} from './sim/engine.js';
 import {recruit,order,undoAnnex} from './sim/army.js';
-import {countries,byId,newWorld} from './data/worldScenario.js';
-import {drawWorldMap,countryAt,mapViewport} from './ui/worldMap.js';
+import {countries,byId,newWorld} from './data/worldScenario.js?map-v2';
+import {drawWorldMap,countryAt,mapViewport} from './ui/worldMap.js?map-v2';
 
 const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
 const W=1280,H=720,C={bg:'#080d1b',panel:'#141d35',cyan:'#60dce4',violet:'#986cf5',plasma:'#d65af0',gold:'#e3bc82',red:'#f0759b',white:'#f0f2ff',muted:'#9aa8c4'};
