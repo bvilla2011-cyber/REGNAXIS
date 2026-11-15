@@ -1,3 +1,3 @@
 export function recordFrame(world,force=false){world.timeline??={frames:[]};if(!force&&world.day%world.rules.snapshotInterval!==0)return;const copy=structuredClone(world);delete copy.timeline;copy.events=copy.events.slice(-80);world.timeline.frames.push({day:world.day,state:copy});world.timeline.frames=world.timeline.frames.slice(-6);}
 export function frameAt(world,day){const match=world.timeline?.frames?.find(f=>f.day===day);if(!match)throw Error('Instantánea no disponible');return structuredClone(match.state);}
-export function saveSnapshot(world){const copy=structuredClone(world);delete copy.timeline;return copy;}
+export function saveSnapshot(world){const copy=structuredClone({...world,timeline:undefined});delete copy.timeline;return copy;}

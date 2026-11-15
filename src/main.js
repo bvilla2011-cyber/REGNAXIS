@@ -1,13 +1,13 @@
 import {translate} from './i18n/messages.js?u2';
 import {theme,applyTheme} from './ui/theme.js?u2';
 import {ranking,validate} from './sim/world.js?u2';
-import {advance} from './sim/engine.js?u2';
+import {advance} from './sim/engine.js?u4';
 import {recruit,queueRecruit,order,split,undoAnnex,quote,UNITS} from './sim/army.js?u2';
 import {relation,treaty,peace} from './sim/diplomacy.js?u2';
 import {invest,assignResearch,PROJECTS} from './sim/research.js?u2';
 import {buildFleet,fleetOrder,SHIPS} from './sim/navy.js?u2';
 import {editCountry,exportScenario,importScenario} from './editor/scenario.js?u2';
-import {frameAt,saveSnapshot,recordFrame} from './core/timeline.js?u2';
+import {frameAt,saveSnapshot,recordFrame} from './core/timeline.js?u4';
 import {addLocalPlayer,passTurn} from './net/local.js?u2';
 import {strike} from './sim/nuclear.js?u2';
 import {ACHIEVEMENTS} from './core/profile.js?u2';
@@ -21,7 +21,9 @@ let scene='intro',world=null,playerChoice='724',selected='724',activeArmyId=null
 const pointers=new Map(),studioLogo=new Image(),gameEmblem=new Image();
 studioLogo.src=new URL('../assets/uniformer-logo.png',import.meta.url).href;gameEmblem.src=new URL('../assets/regnaxis-emblem.svg',import.meta.url).href;
 document.fonts?.load('700 22px Oxanium');document.fonts?.load('600 16px "Space Grotesk"');
-let audioContext;
+let audioContext,revision=0,tickInFlight=false;
+let simWorker=null;
+if(typeof Worker!=='undefined')try{simWorker=new Worker(new URL('./sim/worker.js?u4',import.meta.url),{type:'module'});simWorker.onmessage=event=>{tickInFlight=false;const result=event.data;if(result.revision!==revision)return;if(result.error){paused=true;notify(`Simulación detenida: ${result.error}`);return;}if(scene!=='game'||!world)return;const frames=world.timeline;world=result.world;world.timeline=frames;if(world.day%world.rules.snapshotInterval===0)recordFrame(world);};simWorker.onerror=()=>{tickInFlight=false;simWorker.terminate();simWorker=null;notify('Simulación local activada');};}catch{simWorker=null;}
 let savedSettings={};try{savedSettings=JSON.parse(localStorage.getItem('regnaxis-settings')||'{}')||{};}catch{}
 const settings={audio:true,labels:true,quality:'alta',colorMode:'normal',textScale:1,language:'es',...savedSettings};applyTheme(settings.colorMode);
 function saveSettings(){localStorage.setItem('regnaxis-settings',JSON.stringify(settings));}
@@ -76,10 +78,10 @@ function activeMap(){return scene==='select'?selectMap:['game','editor','replay'
 function inside(p,b){return p.x>=b.x&&p.x<=b.x+b.w&&p.y>=b.y&&p.y<=b.y+b.h;}
 canvas.addEventListener('pointerdown',e=>{canvas.setPointerCapture(e.pointerId);const p=local(e);pointers.set(e.pointerId,p);drag={start:p,last:p,moved:false,list:scene==='select'&&p.x>=791&&p.y>=196&&p.y<=576,map:activeMap()&&inside(p,activeMap())};});
 canvas.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId))return;const p=local(e),old=pointers.get(e.pointerId);pointers.set(e.pointerId,p);if(pointers.size===2&&activeMap()){const points=[...pointers.values()],other=points.find(v=>v!==p),distance=Math.hypot(p.x-other.x,p.y-other.y),oldDistance=Math.hypot(old.x-other.x,old.y-other.y);if(oldDistance>0)changeZoom(distance/oldDistance);if(drag)drag.moved=true;return;}if(!drag)return;const dx=p.x-drag.last.x,dy=p.y-drag.last.y;if(Math.hypot(p.x-drag.start.x,p.y-drag.start.y)>7)drag.moved=true;if(drag.moved&&drag.list){drag.listCarry=(drag.listCarry??0)-dy;const rows=Math.trunc(drag.listCarry/27);if(rows){listOffset=Math.max(0,Math.min(countries.length-10,listOffset+rows));drag.listCarry-=rows*27;}}else if(drag.moved&&drag.map){pan=constrainPan(activeMap(),zoom,{x:pan.x+dx,y:pan.y+dy});}drag.last=p;});
-canvas.addEventListener('pointerup',e=>{const p=local(e),moved=drag?.moved;pointers.delete(e.pointerId);if(pointers.size){if(drag)drag.moved=true;return;}drag=null;if(scene==='intro'){scene='menu';return;}if(moved)return;for(const b of [...buttons].reverse())if(inside(p,b)){uiSound();navigator.vibrate?.(8);b.fn();return;}const map=activeMap();if(map&&inside(p,map)){if(scene==='game'&&world.player){const army=armyAt(world,p.x,p.y,map,zoom,pan);if(army){activeArmyId=army.id;selected=army.cell;notify(`Ejército seleccionado · ${army.strength.toFixed(0)} fuerza`);uiSound();return;}}const id=countryAt(ctx,p.x,p.y,map,zoom,pan);if(id&&byId.has(id)){if(scene==='select')setChoice(id);else selected=id;uiSound();}}});
+canvas.addEventListener('pointerup',e=>{const p=local(e),moved=drag?.moved;pointers.delete(e.pointerId);if(pointers.size){if(drag)drag.moved=true;return;}drag=null;if(scene==='intro'){scene='menu';return;}if(moved)return;for(const b of [...buttons].reverse())if(inside(p,b)){revision++;uiSound();navigator.vibrate?.(8);b.fn();return;}const map=activeMap();if(map&&inside(p,map)){if(scene==='game'&&world.player){const army=armyAt(world,p.x,p.y,map,zoom,pan);if(army){activeArmyId=army.id;selected=army.cell;notify(`Ejército seleccionado · ${army.strength.toFixed(0)} fuerza`);uiSound();return;}}const id=countryAt(ctx,p.x,p.y,map,zoom,pan);if(id&&byId.has(id)){if(scene==='select')setChoice(id);else selected=id;uiSound();}}});
 canvas.addEventListener('pointercancel',e=>{pointers.delete(e.pointerId);drag=null;});canvas.addEventListener('wheel',e=>{const p=local(e),map=activeMap();if(scene==='select'&&p.x>=791&&p.y>=196&&p.y<=577){listOffset=Math.max(0,Math.min(countries.length-10,listOffset+Math.sign(e.deltaY)*3));e.preventDefault();}else if(map&&inside(p,map)){changeZoom(e.deltaY>0?.84:1.16);e.preventDefault();}},{passive:false});
 addEventListener('keydown',e=>{if(scene==='game'){if(e.code==='Space'){e.preventDefault();paused=!paused;}if(e.key==='Escape')drawer=drawer?null:'pause';if(e.key==='f'||e.key==='F')centerOn(selected);if(['1','2','3'].includes(e.key))speed=2**(Number(e.key)-1);if(e.key==='+'||e.key==='=')changeZoom(1.2);if(e.key==='-')changeZoom(1/1.2);}if(scene==='select'){if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();setChoice(countries[Math.max(0,Math.min(countries.length-1,countries.findIndex(c=>c.id===selected)+(e.key==='ArrowDown'?1:-1)))].id);}else if(e.key==='Enter')start(selected);else if(e.key==='Escape')scene='modes';else if(e.key.length===1&&/\p{L}/u.test(e.key)){search=(performance.now()-searchAt>900?'':search)+e.key.toLocaleLowerCase('es');searchAt=performance.now();const found=countries.find(c=>c.name.toLocaleLowerCase('es').startsWith(search));if(found)setChoice(found.id);}}});
-function frame(now){const dt=Math.min(now-last,100);last=now;if(scene==='game'&&!paused&&!world?.winner){acc+=dt;if(acc>=1000/speed){acc=0;try{advance(world,1,mode);}catch(e){paused=true;notify(`Simulación detenida: ${e.message}`);}}}draw();requestAnimationFrame(frame);}requestAnimationFrame(frame);
+function frame(now){const dt=Math.min(now-last,100);last=now;if(scene==='game'&&!paused&&!world?.winner){acc+=dt;if(acc>=1000/speed&&!tickInFlight){acc=0;if(simWorker){tickInFlight=true;simWorker.postMessage({world:saveSnapshot(world),mode,revision});}else try{advance(world,1,mode);}catch(e){paused=true;notify(`Simulación detenida: ${e.message}`);}}}draw();requestAnimationFrame(frame);}requestAnimationFrame(frame);
 
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 document.addEventListener('visibilitychange',()=>{if(document.hidden){paused=true;audioContext?.suspend();}else audioContext?.resume();});
