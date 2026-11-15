@@ -1,6 +1,10 @@
 # Fuentes, créditos y licencias
 
 - Diseño, código, interfaz, SVG y sonidos de REGNAXIS: creación original de UniFormer Studio.
+- Logotipo de UniFormer Studio de la pantalla de apertura: archivo aportado por el propietario del proyecto; `assets/uniformer-logo.png`.
+- Emblema de REGNAXIS y favicon (`assets/regnaxis-emblem.svg`): vector original creado para este juego.
+- [Oxanium](https://github.com/sevmeyer/oxanium), © 2019 The Oxanium Project Authors, SIL Open Font License 1.1: titulares y marca. Licencia íntegra en `assets/fonts/OXANIUM-LICENSE.txt`.
+- [Space Grotesk](https://github.com/floriankarsten/space-grotesk), © 2020 The Space Grotesk Project Authors, SIL Open Font License 1.1: interfaz y datos. Licencia íntegra en `assets/fonts/SPACE-GROTESK-LICENSE.txt`.
 - [Natural Earth](https://www.naturalearthdata.com/about/terms-of-use/): geometrías cartográficas de dominio público. Registrar aquí versión, escala y fecha al incorporar los archivos.
 - [Banco Mundial](https://data.worldbank.org/): indicadores económicos y demográficos; atribución al Banco Mundial y a cada fuente primaria indicada por el conjunto descargado. Registrar códigos de indicadores y año de observación por país.
 - [ONU, World Population Prospects](https://population.un.org/wpp/): proyecciones demográficas sujetas a sus condiciones de reutilización y atribución, a verificar antes de incorporarlas.
