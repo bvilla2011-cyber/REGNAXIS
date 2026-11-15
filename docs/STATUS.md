@@ -6,7 +6,7 @@
 | 1 · Investigación | Completada (alcance accesible) | GDD, análisis de reseñas y atribuciones nuevos; la tienda no permite garantizar lectura de todas las reseñas históricas. |
 | 2 · Núcleo | En curso | Simulación original de puntos, anexión, ejército, economía y victoria; falta mapa mundial y ejecución en worker. |
 | 3 · Diplomacia e IA | En curso | Relaciones, tratados, guerra, paz, investigación y CPU que recluta/expande con razones; falta estrategia profunda y equilibrio. |
-| 4 · Interfaz | En curso | Identidad violeta/cian propia, emblema SVG y favicon, Oxanium y Space Grotesk locales, apertura con logo UniFormer y fundido, globo animado, mapa y HUD; faltan escenas y controles completos. |
+| 4 · Interfaz | En curso | Identidad violeta/cian propia, emblema SVG y favicon, Oxanium y Space Grotesk locales, apertura con logo UniFormer y fundido, globo animado, telemetría de partida, cuadrícula táctica, marcadores de población/PIB y panel de sector; faltan escenas y controles completos. |
 | 5 · Modos y editor | Pendiente | Escenarios, scripts, guardados. |
 | 6 · Marina | Pendiente | Flotas y mejoras. |
 | 7 · Multijugador | Pendiente | Local y salas. |
