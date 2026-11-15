@@ -18,3 +18,6 @@ La etiqueta aún no está publicada en GitHub porque el conector no expone creac
 
 Fase 0: auditoría realizada en `docs/AUDIT.md`. Respaldo: etiqueta local y rama remota `backup-before-dummynation-upgrade` en `21c6d201`.
 Fase 1: fuentes consultadas de nuevo; acceso parcial a App Store, wiki bloqueado, reglas de equilibrio y peticiones incorporadas al GDD y análisis.
+Fase 2: entrenamiento diario, mantenimiento, comercio bilateral y cámara acotada añadidos; mapas de puntos internos y datos macro oficiales continúan pendientes.
+Fase 3: bloque UE, reacción defensiva, criterios de guerra de IA y árbol ampliado de investigación con asignación diaria; pruebas de estos comportamientos añadidas.
+Fase 4: HUD jerarquizado, fecha, alertas, páginas de unidades/tratados/investigación dentro de Canvas. La accesibilidad y algunas pantallas siguen pendientes.

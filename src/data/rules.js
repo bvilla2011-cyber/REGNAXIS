@@ -1,2 +1,2 @@
-export const DEFAULT_RULES=Object.freeze({victoryShare:.5,victoryHoldDays:7,hardcoreHoldDays:14,annexBase:.22,militiaThreshold:.6,growthBase:.024,annualEquipmentDecay:.04,snapshotInterval:30});
+export const DEFAULT_RULES=Object.freeze({victoryShare:.5,victoryHoldDays:7,hardcoreHoldDays:14,annexBase:.22,militiaThreshold:.6,growthBase:.024,annualEquipmentDecay:.04,snapshotInterval:30,aiWarThreshold:16,aiMinRelationForWar:42,blocRelationPenalty:35,tradeRate:.008,tradeOpeningCost:25,trainingCapacity:2,maintenanceRate:.0004,maxZoom:7});
 export function normalizeRules(input={}){const result={...DEFAULT_RULES,...input};for(const [name,value] of Object.entries(result))if(!Number.isFinite(value)||value<0)throw Error(`Parámetro inválido: ${name}`);return result;}

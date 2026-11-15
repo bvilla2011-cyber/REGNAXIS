@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {countries,byId,newWorld} from '../src/data/worldScenario.js';
 import {advance} from '../src/sim/engine.js';
+import {order} from '../src/sim/army.js';
 
 test('atlas completo, nombres españoles ordenados e identificadores únicos',()=>{
   assert.equal(countries.length,240);
@@ -20,6 +21,6 @@ test('una isla sin frontera terrestre conserva ruta jugable',()=>{
   assert.ok(world.cells['702'].seaRoutes.length>0);
 });
 test('la campaña mundial avanza tras derrotas y repliegues sin bloquearse',()=>{
-  const world=newWorld('250');advance(world,60);assert.equal(world.day,60);
+  const world=newWorld('250');world.armies.push({id:'defender',country:'276',cell:'276',type:'infantry',strength:55,morale:75,equipment:1});order(world,'u-player','attack','276');advance(world,60);assert.equal(world.day,60);
   assert.ok(world.armies.length>10);assert.ok(world.events.length>0);
 });
