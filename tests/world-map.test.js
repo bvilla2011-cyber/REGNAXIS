@@ -19,3 +19,7 @@ test('una isla sin frontera terrestre conserva ruta jugable',()=>{
   const world=newWorld('702');assert.ok(world.cells['702'].neighbors.length>0);
   assert.ok(world.cells['702'].seaRoutes.length>0);
 });
+test('la campaña mundial avanza tras derrotas y repliegues sin bloquearse',()=>{
+  const world=newWorld('250');advance(world,60);assert.equal(world.day,60);
+  assert.ok(world.armies.length>10);assert.ok(world.events.length>0);
+});
