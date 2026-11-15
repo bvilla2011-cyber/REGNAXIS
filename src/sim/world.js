@@ -6,12 +6,12 @@ export function createWorld({countries,cells,points,armies=[],seed=1,rules={}}){
 }
 export function validate(world){const ids=new Set(Object.keys(world.countries));if(!ids.size)throw Error('Mundo sin países');
   for(const [id,cell] of Object.entries(world.cells)){if(!ids.has(cell.controller))throw Error(`Control inválido: ${id}`);for(const next of cell.neighbors)if(!world.cells[next])throw Error(`Vecino inválido: ${next}`);}
-  for(const point of world.points)if(!world.cells[point.cell]||point.gdp<0||point.population<0)throw Error(`Punto inválido: ${point.id}`);
+  for(const point of world.points)if(!world.cells[point.cell]||point.controller&&!ids.has(point.controller)||point.gdp<0||point.population<0)throw Error(`Punto inválido: ${point.id}`);
   for(const army of world.armies)if(!ids.has(army.country)||!world.cells[army.cell])throw Error(`Ejército inválido: ${army.id}`);
 }
 export function recalculate(world){for(const country of Object.values(world.countries)){country.gdp=0;country.population=0;country.territory=0;}
   for(const cell of Object.values(world.cells))world.countries[cell.controller].territory+=cell.area??1;
-  for(const point of world.points){const country=world.countries[world.cells[point.cell].controller];country.gdp+=point.gdp*(point.productivity??1);country.population+=point.population;}return world;}
+  for(const point of world.points){const country=world.countries[point.controller??world.cells[point.cell].controller];country.gdp+=point.gdp*(point.productivity??1);country.population+=point.population;}return world;}
 export function ranking(world){recalculate(world);const total=Object.values(world.countries).reduce((sum,c)=>sum+c.gdp,0);return Object.entries(world.countries).map(([id,c])=>({id,gdp:c.gdp,share:total?c.gdp/total:0})).sort((a,b)=>b.share-a.share||a.id.localeCompare(b.id));}
 export function victory(world,mode='casual'){const ranks=ranking(world),cs=Object.values(world.countries),pop=cs.reduce((s,c)=>s+c.population,0),land=cs.reduce((s,c)=>s+c.territory,0),power=world.armies.reduce((s,a)=>s+a.strength*(a.equipment??1),0);
   for(const row of ranks){const c=world.countries[row.id],p=world.armies.filter(a=>a.country===row.id).reduce((s,a)=>s+a.strength*(a.equipment??1),0);

@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {newWorld} from '../src/data/worldScenario.js';import {buildFleet,fleetOrder,navalDay} from '../src/sim/navy.js';
+import {relation,treaty} from '../src/sim/diplomacy.js';import {tradeDay} from '../src/sim/trade.js';
+test('flota navega por ruta marítima y bloquea comercio',()=>{const w=newWorld('724'),port='724',target=w.cells[port].seaRoutes[0];assert.ok(target);const f=buildFleet(w,port,'destroyer',port);fleetOrder(w,f.id,'sail',target);navalDay(w);assert.equal(f.cell,target);assert.ok(f.hull>0);});
+test('bloqueo naval activa guerra y suspende una ruta',()=>{const w=newWorld('724'),target=w.cells['724'].seaRoutes[0],f=buildFleet(w,'724','submarine','724');w.countries['724'].researchPoints=100;relation(w,'724',target).value=55;treaty(w,'724',target,'trade');fleetOrder(w,f.id,'blockade',target);navalDay(w);tradeDay(w);assert.equal(relation(w,'724',target).atWar,true);assert.equal(w.tradeRoutes[0].status,'blocked');});
